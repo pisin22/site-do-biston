@@ -1,0 +1,791 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirGlow - Vaso Tecnológico de Purificação de Ar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e1f5fe 100%);
+            overflow-x: hidden;
+        }
+        
+        .glow {
+            animation: glowing 3s infinite alternate;
+        }
+        
+        @keyframes glowing {
+            0% {
+                filter: drop-shadow(0 0 5px rgba(80, 220, 170, 0.6));
+            }
+            100% {
+                filter: drop-shadow(0 0 15px rgba(80, 220, 170, 0.9));
+            }
+        }
+        
+        .rotate-slow {
+            animation: rotate 30s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .air-particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            25% {
+                opacity: 0.8;
+            }
+            75% {
+                opacity: 0.4;
+            }
+            50% {
+                transform: translateY(-100px) translateX(20px);
+                opacity: 1;
+            }
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .air-quality-meter {
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to right, #4ade80, #facc15, #f87171);
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .air-quality-indicator {
+            width: 12px;
+            height: 20px;
+            background-color: white;
+            border: 2px solid #334155;
+            border-radius: 4px;
+            position: absolute;
+            top: -5px;
+            transform: translateX(-50%);
+            transition: left 1s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Navbar -->
+        <nav class="bg-gradient-to-r from-emerald-600 to-teal-500 text-white shadow-lg">
+            <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 6.5c2.5 0 4.5 2 4.5 4.5 0 3.5-4.5 8-4.5 8s-4.5-4.5-4.5-8c0-2.5 2-4.5 4.5-4.5z"/>
+                        <path d="M12 3v2"/>
+                        <path d="M18 9h2"/>
+                        <path d="M4 9h2"/>
+                        <path d="M16 16l1.5 1.5"/>
+                        <path d="M6.5 16L5 17.5"/>
+                    </svg>
+                    <span class="font-bold text-xl tracking-tight">AirGlow</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#" class="hover:text-emerald-100 transition">Início</a>
+                    <a href="#features" class="hover:text-emerald-100 transition">Funcionalidades</a>
+                    <a href="#technology" class="hover:text-emerald-100 transition">Tecnologia</a>
+                    <a href="#impact" class="hover:text-emerald-100 transition">Impacto</a>
+                </div>
+                <button class="bg-white text-emerald-600 px-4 py-2 rounded-full font-medium hover:bg-emerald-50 transition shadow-md">
+                    Pré-Reserva
+                </button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="relative py-12 md:py-20 overflow-hidden">
+            <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 z-10">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6 leading-tight">
+                        AirGlow: Revolucionando a <span class="text-emerald-600">Purificação de Ar</span>
+                    </h1>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Combinando biotecnologia, nanomateriais e inteligência artificial para transformar o ar que você respira, com design elegante e sustentável.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-full shadow-lg transition transform hover:scale-105">
+                            Saiba mais
+                        </button>
+                        <button class="border-2 border-emerald-600 text-emerald-600 font-medium py-3 px-6 rounded-full hover:bg-emerald-50 transition transform hover:scale-105">
+                            Ver demonstração
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 relative">
+                    <div class="relative w-80 h-96 mx-auto">
+                        <!-- Vaso -->
+                        <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-64 h-64 bg-gradient-to-b from-teal-400 to-emerald-600 rounded-b-full rounded-t-lg shadow-xl z-10"></div>
+                        
+                        <!-- Anel LED -->
+                        <div class="absolute bottom-56 left-1/2 transform -translate-x-1/2 w-64 h-8 bg-white/20 rounded-full z-20 glow"></div>
+                        
+                        <!-- Planta -->
+                        <div class="absolute bottom-56 left-1/2 transform -translate-x-1/2 z-30">
+                            <svg width="120" height="160" viewBox="0 0 120 160" fill="none">
+                                <path d="M60 0C60 40 30 60 30 100C30 130 60 160 60 160" stroke="#2F855A" stroke-width="4"/>
+                                <path d="M60 0C60 40 90 60 90 100C90 130 60 160 60 160" stroke="#2F855A" stroke-width="4"/>
+                                <path d="M60 40C60 60 40 70 40 90C40 110 60 130 60 130" stroke="#2F855A" stroke-width="3"/>
+                                <path d="M60 40C60 60 80 70 80 90C80 110 60 130 60 130" stroke="#2F855A" stroke-width="3"/>
+                                
+                                <!-- Folhas -->
+                                <ellipse cx="30" cy="90" rx="15" ry="8" transform="rotate(-20 30 90)" fill="#4ADE80"/>
+                                <ellipse cx="90" cy="90" rx="15" ry="8" transform="rotate(20 90 90)" fill="#4ADE80"/>
+                                <ellipse cx="40" cy="70" rx="18" ry="9" transform="rotate(-15 40 70)" fill="#4ADE80"/>
+                                <ellipse cx="80" cy="70" rx="18" ry="9" transform="rotate(15 80 70)" fill="#4ADE80"/>
+                                <ellipse cx="45" cy="50" rx="20" ry="10" transform="rotate(-10 45 50)" fill="#4ADE80"/>
+                                <ellipse cx="75" cy="50" rx="20" ry="10" transform="rotate(10 75 50)" fill="#4ADE80"/>
+                            </svg>
+                        </div>
+                        
+                        <!-- Partículas de ar -->
+                        <div id="particles-container" class="absolute inset-0 z-0">
+                            <!-- Partículas serão adicionadas via JavaScript -->
+                        </div>
+                        
+                        <!-- Círculo de tecnologia -->
+                        <div class="absolute bottom-32 left-1/2 transform -translate-x-1/2 w-72 h-72">
+                            <svg class="w-full h-full rotate-slow opacity-30" viewBox="0 0 200 200" fill="none">
+                                <circle cx="100" cy="100" r="80" stroke="#0EA5E9" stroke-width="1" stroke-dasharray="5 3"/>
+                                <circle cx="100" cy="100" r="60" stroke="#0EA5E9" stroke-width="1" stroke-dasharray="5 3"/>
+                                <circle cx="100" cy="100" r="40" stroke="#0EA5E9" stroke-width="1" stroke-dasharray="5 3"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Funcionalidades Revolucionárias</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Planta Biotecnológica</h3>
+                        <p class="text-gray-600">Geneticamente otimizada para maximizar a absorção de poluentes como formaldeído, benzeno e CO₂.</p>
+                    </div>
+                    
+                    <!-- Feature 2 -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Filtros de Nanomateriais</h3>
+                        <p class="text-gray-600">Capturam partículas ultrafinas (PM2.5) e compostos orgânicos voláteis com tecnologia de grafeno funcionalizado.</p>
+                    </div>
+                    
+                    <!-- Feature 3 -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">IA Integrada</h3>
+                        <p class="text-gray-600">Alimentado por Grok 3, monitora a qualidade do ar em tempo real e ajusta a purificação automaticamente.</p>
+                    </div>
+                    
+                    <!-- Feature 4 -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 rounded-xl shadow-md hover:shadow-lg transition">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Iluminação LED AirGlow</h3>
+                        <p class="text-gray-600">Emite luz suave bioluminescente que ajusta o espectro para promover fotossíntese e criar ambiente relaxante.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Section -->
+        <section id="technology" class="py-16 bg-gradient-to-b from-teal-50 to-emerald-50">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Tecnologia Avançada</h2>
+                
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="md:w-1/2">
+                        <div class="bg-white rounded-xl shadow-lg p-6 h-full">
+                            <div class="mb-6">
+                                <div class="flex space-x-4 border-b">
+                                    <button class="tab-button py-2 px-4 font-medium text-emerald-600 border-b-2 border-emerald-600" data-tab="air-quality">Qualidade do Ar</button>
+                                    <button class="tab-button py-2 px-4 font-medium text-gray-500 hover:text-emerald-600" data-tab="plant-status">Status da Planta</button>
+                                    <button class="tab-button py-2 px-4 font-medium text-gray-500 hover:text-emerald-600" data-tab="filter-status">Filtros</button>
+                                </div>
+                            </div>
+                            
+                            <div id="air-quality" class="tab-content active">
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-2">Monitoramento em Tempo Real</h3>
+                                    <p class="text-gray-600 mb-4">O AirGlow monitora constantemente a qualidade do ar ao seu redor.</p>
+                                    
+                                    <div class="space-y-4">
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="text-sm font-medium">Partículas (PM2.5)</span>
+                                                <span class="text-sm font-medium text-emerald-600">12 μg/m³</span>
+                                            </div>
+                                            <div class="air-quality-meter">
+                                                <div class="air-quality-indicator" style="left: 20%"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="text-sm font-medium">VOCs</span>
+                                                <span class="text-sm font-medium text-emerald-600">0.3 ppm</span>
+                                            </div>
+                                            <div class="air-quality-meter">
+                                                <div class="air-quality-indicator" style="left: 15%"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="text-sm font-medium">CO₂</span>
+                                                <span class="text-sm font-medium text-yellow-600">650 ppm</span>
+                                            </div>
+                                            <div class="air-quality-meter">
+                                                <div class="air-quality-indicator" style="left: 45%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-emerald-50 p-4 rounded-lg">
+                                    <div class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mt-0.5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                        </svg>
+                                        <p class="text-sm text-gray-700">A qualidade do ar está <span class="font-medium text-emerald-600">boa</span>. O AirGlow está funcionando de forma eficiente.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="plant-status" class="tab-content">
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-2">Status da Planta Biotecnológica</h3>
+                                    <p class="text-gray-600 mb-4">Monitoramento da saúde e eficiência da planta.</p>
+                                    
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-emerald-50 p-4 rounded-lg">
+                                            <h4 class="font-medium text-gray-800 mb-1">Saúde</h4>
+                                            <div class="flex items-center">
+                                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                    <div class="bg-emerald-600 h-2.5 rounded-full" style="width: 95%"></div>
+                                                </div>
+                                                <span class="ml-2 text-sm font-medium">95%</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-emerald-50 p-4 rounded-lg">
+                                            <h4 class="font-medium text-gray-800 mb-1">Hidratação</h4>
+                                            <div class="flex items-center">
+                                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                    <div class="bg-blue-500 h-2.5 rounded-full" style="width: 80%"></div>
+                                                </div>
+                                                <span class="ml-2 text-sm font-medium">80%</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-emerald-50 p-4 rounded-lg">
+                                            <h4 class="font-medium text-gray-800 mb-1">Fotossíntese</h4>
+                                            <div class="flex items-center">
+                                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                    <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 88%"></div>
+                                                </div>
+                                                <span class="ml-2 text-sm font-medium">88%</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-emerald-50 p-4 rounded-lg">
+                                            <h4 class="font-medium text-gray-800 mb-1">Nutrientes</h4>
+                                            <div class="flex items-center">
+                                                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                    <div class="bg-purple-500 h-2.5 rounded-full" style="width: 75%"></div>
+                                                </div>
+                                                <span class="ml-2 text-sm font-medium">75%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-emerald-50 p-4 rounded-lg">
+                                    <div class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mt-0.5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                        </svg>
+                                        <p class="text-sm text-gray-700">Sua planta está saudável. Recomendamos adicionar nutrientes nos próximos 3 dias.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="filter-status" class="tab-content">
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold mb-2">Status dos Filtros de Nanomateriais</h3>
+                                    <p class="text-gray-600 mb-4">Monitoramento da eficiência e vida útil dos filtros.</p>
+                                    
+                                    <div class="space-y-4">
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="text-sm font-medium">Filtro Principal</span>
+                                                <span class="text-sm font-medium text-emerald-600">85% restante</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                <div class="bg-emerald-600 h-2.5 rounded-full" style="width: 85%"></div>
+                                            </div>
+                                            <p class="text-xs text-gray-500 mt-1">Estimativa: 120 dias restantes</p>
+                                        </div>
+                                        
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="text-sm font-medium">Filtro de VOCs</span>
+                                                <span class="text-sm font-medium text-emerald-600">92% restante</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                <div class="bg-emerald-600 h-2.5 rounded-full" style="width: 92%"></div>
+                                            </div>
+                                            <p class="text-xs text-gray-500 mt-1">Estimativa: 145 dias restantes</p>
+                                        </div>
+                                        
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="text-sm font-medium">Filtro de Partículas</span>
+                                                <span class="text-sm font-medium text-yellow-600">68% restante</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                                <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 68%"></div>
+                                            </div>
+                                            <p class="text-xs text-gray-500 mt-1">Estimativa: 90 dias restantes</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-emerald-50 p-4 rounded-lg">
+                                    <div class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mt-0.5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                        </svg>
+                                        <p class="text-sm text-gray-700">Todos os filtros estão funcionando normalmente. Nenhuma ação necessária no momento.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-1/2">
+                        <div class="bg-white rounded-xl shadow-lg p-6 h-full">
+                            <h3 class="text-xl font-semibold mb-4">Componentes Tecnológicos</h3>
+                            
+                            <div class="relative h-80 mb-6">
+                                <!-- Esquema do AirGlow -->
+                                <svg class="w-full h-full" viewBox="0 0 400 300" fill="none">
+                                    <!-- Vaso base -->
+                                    <path d="M150 250C150 250 120 180 120 150C120 120 150 100 200 100C250 100 280 120 280 150C280 180 250 250 250 250H150Z" fill="#2DD4BF" fill-opacity="0.3" stroke="#0D9488" stroke-width="2"/>
+                                    
+                                    <!-- Planta -->
+                                    <path d="M200 100C200 100 180 70 180 50C180 30 200 20 200 20C200 20 220 30 220 50C220 70 200 100 200 100Z" fill="#4ADE80" stroke="#166534" stroke-width="1"/>
+                                    <path d="M200 100C200 100 160 80 150 60C140 40 160 20 160 20C160 20 180 30 190 50C200 70 200 100 200 100Z" fill="#4ADE80" stroke="#166534" stroke-width="1"/>
+                                    <path d="M200 100C200 100 240 80 250 60C260 40 240 20 240 20C240 20 220 30 210 50C200 70 200 100 200 100Z" fill="#4ADE80" stroke="#166534" stroke-width="1"/>
+                                    
+                                    <!-- Sistema de filtros -->
+                                    <rect x="140" y="180" width="120" height="20" rx="5" fill="#94A3B8" stroke="#475569" stroke-width="1"/>
+                                    <text x="200" y="193" text-anchor="middle" fill="#1E293B" font-size="10">Filtros de Nanomateriais</text>
+                                    
+                                    <!-- Ventilador -->
+                                    <circle cx="200" cy="220" r="15" fill="#CBD5E1" stroke="#475569" stroke-width="1"/>
+                                    <path d="M200 215L190 225H210L200 215Z" fill="#475569"/>
+                                    <path d="M200 225L190 215H210L200 225Z" fill="#475569"/>
+                                    <text x="200" y="240" text-anchor="middle" fill="#1E293B" font-size="8">Ventilador Silencioso</text>
+                                    
+                                    <!-- Sensores -->
+                                    <circle cx="160" cy="150" r="5" fill="#3B82F6" stroke="#1E40AF" stroke-width="1"/>
+                                    <text x="160" y="165" text-anchor="middle" fill="#1E293B" font-size="8">Sensor</text>
+                                    
+                                    <circle cx="240" cy="150" r="5" fill="#3B82F6" stroke="#1E40AF" stroke-width="1"/>
+                                    <text x="240" y="165" text-anchor="middle" fill="#1E293B" font-size="8">Sensor</text>
+                                    
+                                    <!-- LED Ring -->
+                                    <ellipse cx="200" cy="120" rx="50" ry="10" fill="#A5F3FC" fill-opacity="0.5" stroke="#0891B2" stroke-width="1" stroke-dasharray="2 2"/>
+                                    <text x="200" y="120" text-anchor="middle" fill="#1E293B" font-size="8">Anel LED AirGlow</text>
+                                    
+                                    <!-- Processador IA -->
+                                    <rect x="185" y="200" width="30" height="10" rx="2" fill="#8B5CF6" stroke="#6D28D9" stroke-width="1"/>
+                                    <text x="200" y="207" text-anchor="middle" fill="white" font-size="6">IA Grok 3</text>
+                                    
+                                    <!-- Linhas de conexão -->
+                                    <path d="M160 150L185 200" stroke="#94A3B8" stroke-width="1" stroke-dasharray="2 2"/>
+                                    <path d="M240 150L215 200" stroke="#94A3B8" stroke-width="1" stroke-dasharray="2 2"/>
+                                    <path d="M200 120L200 180" stroke="#94A3B8" stroke-width="1" stroke-dasharray="2 2"/>
+                                    
+                                    <!-- Partículas -->
+                                    <circle cx="130" cy="80" r="3" fill="#F87171" fill-opacity="0.7"/>
+                                    <circle cx="140" cy="60" r="2" fill="#F87171" fill-opacity="0.7"/>
+                                    <circle cx="160" cy="40" r="2.5" fill="#F87171" fill-opacity="0.7"/>
+                                    <circle cx="270" cy="80" r="3" fill="#F87171" fill-opacity="0.7"/>
+                                    <circle cx="260" cy="60" r="2" fill="#F87171" fill-opacity="0.7"/>
+                                    <circle cx="240" cy="40" r="2.5" fill="#F87171" fill-opacity="0.7"/>
+                                    
+                                    <!-- Ar purificado -->
+                                    <circle cx="180" cy="30" r="3" fill="#4ADE80" fill-opacity="0.7"/>
+                                    <circle cx="200" cy="20" r="2" fill="#4ADE80" fill-opacity="0.7"/>
+                                    <circle cx="220" cy="30" r="2.5" fill="#4ADE80" fill-opacity="0.7"/>
+                                    
+                                    <!-- Legendas -->
+                                    <circle cx="320" cy="50" r="3" fill="#F87171" fill-opacity="0.7"/>
+                                    <text x="330" y="53" font-size="10" fill="#1E293B">Poluentes</text>
+                                    
+                                    <circle cx="320" cy="70" r="3" fill="#4ADE80" fill-opacity="0.7"/>
+                                    <text x="330" y="73" font-size="10" fill="#1E293B">Ar Purificado</text>
+                                </svg>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-gray-800">Processamento Inteligente</h4>
+                                        <p class="text-sm text-gray-600">O sistema de IA analisa constantemente os dados dos sensores para otimizar a purificação do ar.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-gray-800">Consumo Energético Mínimo</h4>
+                                        <p class="text-sm text-gray-600">Apenas 10W de consumo, 90% menos que purificadores tradicionais, com eficiência superior.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mr-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-gray-800">Controle via Aplicativo</h4>
+                                        <p class="text-sm text-gray-600">Monitore e controle seu AirGlow de qualquer lugar através do aplicativo para iOS e Android.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impact Section -->
+        <section id="impact" class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Impacto Potencial</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Health Impact -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-md p-6">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Saúde</h3>
+                        <p class="text-gray-600 mb-4">Melhora significativa da qualidade do ar interno, reduzindo riscos de alergias, asma e doenças respiratórias.</p>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Redução de 95% dos poluentes em 24h</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Eliminação de alérgenos e irritantes</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Melhoria do sono e bem-estar geral</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Environmental Impact -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-md p-6">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Ambiental</h3>
+                        <p class="text-gray-600 mb-4">Promove sustentabilidade com baixo consumo energético e materiais recicláveis, reduzindo a pegada de carbono.</p>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>90% menos energia que purificadores convencionais</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Materiais biodegradáveis e recicláveis</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Redução ativa de CO₂ do ambiente</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Social Impact -->
+                    <div class="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl shadow-md p-6">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Social</h3>
+                        <p class="text-gray-600 mb-4">Acessível para residências e espaços públicos, com potencial para instalação em grande escala em cidades poluídas.</p>
+                        <ul class="space-y-2 text-sm text-gray-600">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Ideal para escolas, hospitais e escritórios</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Potencial para melhorar saúde pública em áreas urbanas</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Democratização do acesso a ar limpo</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-16 bg-gradient-to-r from-emerald-600 to-teal-500 text-white">
+            <div class="container mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold mb-6">Junte-se à Revolução do Ar Limpo</h2>
+                <p class="text-lg mb-8 max-w-2xl mx-auto">Seja um dos primeiros a experimentar o AirGlow e transforme o ar do seu ambiente com tecnologia de ponta e design sustentável.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button class="bg-white text-emerald-600 font-medium py-3 px-8 rounded-full shadow-lg hover:bg-emerald-50 transition transform hover:scale-105">
+                        Pré-Reserva com Desconto
+                    </button>
+                    <button class="border-2 border-white text-white font-medium py-3 px-8 rounded-full hover:bg-white/10 transition transform hover:scale-105">
+                        Saiba Mais
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-12">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col md:flex-row justify-between">
+                    <div class="mb-8 md:mb-0">
+                        <div class="flex items-center space-x-2 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 6.5c2.5 0 4.5 2 4.5 4.5 0 3.5-4.5 8-4.5 8s-4.5-4.5-4.5-8c0-2.5 2-4.5 4.5-4.5z"/>
+                                <path d="M12 3v2"/>
+                                <path d="M18 9h2"/>
+                                <path d="M4 9h2"/>
+                                <path d="M16 16l1.5 1.5"/>
+                                <path d="M6.5 16L5 17.5"/>
+                            </svg>
+                            <span class="font-bold text-xl tracking-tight">AirGlow</span>
+                        </div>
+                        <p class="text-gray-400 max-w-xs">Transformando o ar que você respira com tecnologia avançada e design sustentável.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                        <div>
+                            <h3 class="font-semibold text-lg mb-4">Produto</h3>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="text-gray-400 hover:text-white transition">Funcionalidades</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white transition">Tecnologia</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white transition">Aplicativo</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white transition">Preços</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-4">Empresa</h3>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="text-gray-400 hover:text-white transition">Sobre nós</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white transition">Sustentabilidade</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white transition">Imprensa</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white transition">Carreiras</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-4">Contato</h3>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="text-gray-400 hover:text-white transition">Suporte</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white transition">Vendas</a></li>
+                                <li><a href="#" class="text-gray-400 hover:text-white transition">Parcerias</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; 2023 AirGlow. Todos os direitos reservados.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Criar partículas de ar
+        function createParticles() {
+            const container = document.getElementById('particles-container');
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('air-particle');
+                
+                // Tamanho aleatório
+                const size = Math.random() * 5 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posição aleatória
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                particle.style.left = `${posX}%`;
+                particle.style.bottom = `${posY}%`;
+                
+                // Atraso na animação
+                particle.style.animationDelay = `${Math.random() * 8}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // Alternar entre abas
+        function setupTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remover classe ativa de todos os botões e conteúdos
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('text-emerald-600', 'border-emerald-600');
+                        btn.classList.add('text-gray-500');
+                    });
+                    
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Adicionar classe ativa ao botão clicado
+                    button.classList.add('text-emerald-600', 'border-emerald-600');
+                    button.classList.remove('text-gray-500');
+                    
+                    // Mostrar conteúdo correspondente
+                    const tabId = button.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        }
+        
+        // Animar indicadores de qualidade do ar
+        function animateAirQualityIndicators() {
+            const indicators = document.querySelectorAll('.air-quality-indicator');
+            
+            indicators.forEach(indicator => {
+                setInterval(() => {
+                    const newPosition = 10 + Math.random() * 30;
+                    indicator.style.left = `${newPosition}%`;
+                }, 5000);
+            });
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            setupTabs();
+            animateAirQualityIndicators();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'94a7379d0020f191',t:'MTc0OTAzNzg3NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
